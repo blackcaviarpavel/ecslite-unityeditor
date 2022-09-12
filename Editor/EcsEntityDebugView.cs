@@ -41,7 +41,7 @@ namespace Submodules.EcsLiteEditor {
                         EditorGUILayout.LabelField (typeName, EditorStyles.boldLabel);
                         var indent = EditorGUI.indentLevel;
                         EditorGUI.indentLevel++;
-                        foreach (var field in type.GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
+                        foreach (var field in type.GetProperties (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
                             DrawTypeField (component, pool, field, debugView);
                         }
                         EditorGUI.indentLevel = indent;
@@ -57,17 +57,17 @@ namespace Submodules.EcsLiteEditor {
             }
         }
 
-        void DrawTypeField (object component, IEcsPool pool, FieldInfo field, EcsEntityDebugView debugView) {
-            var fieldValue = field.GetValue (component);
-            var fieldType = field.FieldType;
-            var (rendered, changed, newValue) = EcsComponentInspectors.Render (field.Name, fieldType, fieldValue, debugView);
+        void DrawTypeField (object component, IEcsPool pool, PropertyInfo property, EcsEntityDebugView debugView) {
+            var fieldValue = property.GetValue (component);
+            var fieldType = property.PropertyType;
+            var (rendered, changed, newValue) = EcsComponentInspectors.Render (property.Name, fieldType, fieldValue, debugView);
             if (!rendered) {
                 if (fieldType == typeof (Object) || fieldType.IsSubclassOf (typeof (Object))) {
                     GUILayout.BeginHorizontal ();
-                    EditorGUILayout.LabelField (field.Name, GUILayout.MaxWidth (EditorGUIUtility.labelWidth - 16));
+                    EditorGUILayout.LabelField (property.Name, GUILayout.MaxWidth (EditorGUIUtility.labelWidth - 16));
                     var newObjValue = EditorGUILayout.ObjectField (fieldValue as Object, fieldType, true);
                     if (newObjValue != (Object) fieldValue) {
-                        field.SetValue (component, newObjValue);
+                        property.SetValue (component, newObjValue);
                         pool.SetRaw (debugView.Entity, component);
                     }
                     GUILayout.EndHorizontal ();
@@ -75,9 +75,9 @@ namespace Submodules.EcsLiteEditor {
                 }
                 if (fieldType.IsEnum) {
                     var isFlags = Attribute.IsDefined (fieldType, typeof (FlagsAttribute));
-                    var (enumChanged, enumNewValue) = EcsComponentInspectors.RenderEnum (field.Name, fieldValue, isFlags);
+                    var (enumChanged, enumNewValue) = EcsComponentInspectors.RenderEnum (property.Name, fieldValue, isFlags);
                     if (enumChanged) {
-                        field.SetValue (component, enumNewValue);
+                        property.SetValue (component, enumNewValue);
                         pool.SetRaw (debugView.Entity, component);
                     }
                     return;
@@ -87,13 +87,13 @@ namespace Submodules.EcsLiteEditor {
                     strVal = strVal.Substring (0, MaxFieldToStringLength);
                 }
                 GUILayout.BeginHorizontal ();
-                EditorGUILayout.PrefixLabel (field.Name);
+                EditorGUILayout.PrefixLabel (property.Name);
                 EditorGUILayout.SelectableLabel (strVal, GUILayout.MaxHeight (EditorGUIUtility.singleLineHeight));
                 GUILayout.EndHorizontal ();
             } else {
                 if (changed) {
                     // update value.
-                    field.SetValue (component, newValue);
+                    property.SetValue (component, newValue);
                     pool.SetRaw (debugView.Entity, component);
                 }
             }
