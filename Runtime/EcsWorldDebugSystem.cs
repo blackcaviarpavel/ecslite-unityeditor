@@ -74,7 +74,7 @@ namespace Submodules.EcsLiteEditor {
                 if (_bakeComponentsInName) {
                     _dirtyEntities[entity] = 1;
                 } else {
-                    go.name = entity.ToString ();
+                    go.name = $"Entity: {entity}";
                 }
             }
             _entities[entity].gameObject.SetActive (true);
