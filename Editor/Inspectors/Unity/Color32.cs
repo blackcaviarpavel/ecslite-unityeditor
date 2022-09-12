@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class Color32Inspector : EcsComponentInspectorTyped<Color32> {
         public override bool OnGuiTyped (string label, ref Color32 value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.ColorField (label, value);

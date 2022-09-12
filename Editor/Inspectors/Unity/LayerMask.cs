@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class LayerMaskInspector : EcsComponentInspectorTyped<LayerMask> {
         public override bool OnGuiTyped (string label, ref LayerMask value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.LayerField (label, value);

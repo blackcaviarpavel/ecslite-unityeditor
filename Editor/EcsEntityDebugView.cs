@@ -6,11 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Submodules.EcsLite;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Leopotam.EcsLite.UnityEditor {
+namespace Submodules.EcsLiteEditor {
     [CustomEditor (typeof (EcsEntityDebugView))]
     sealed class EcsEntityDebugViewInspector : Editor {
         const int MaxFieldToStringLength = 128;

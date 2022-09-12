@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class GradientInspector : EcsComponentInspectorTyped<Gradient> {
         public override bool OnGuiTyped (string label, ref Gradient value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.GradientField (label, value);

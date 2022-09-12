@@ -5,7 +5,7 @@
 
 using UnityEditor;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class IntInspector : EcsComponentInspectorTyped<int> {
         public override bool OnGuiTyped (string label, ref int value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.IntField (label, value);

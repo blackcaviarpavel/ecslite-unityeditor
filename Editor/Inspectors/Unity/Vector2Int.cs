@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class Vector2IntInspector : EcsComponentInspectorTyped<Vector2Int> {
         public override bool OnGuiTyped (string label, ref Vector2Int value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.Vector2IntField (label, value);

@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class RectInspector : EcsComponentInspectorTyped<Rect> {
         public override bool OnGuiTyped (string label, ref Rect value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.RectField (label, value);

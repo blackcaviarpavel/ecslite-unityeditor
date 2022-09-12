@@ -3,10 +3,11 @@
 // Copyright (c) 2012-2022 Leopotam <leopotam@yandex.ru>
 // ----------------------------------------------------------------------------
 
+using Submodules.EcsLite;
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class EcsPackedEntityInspector : EcsComponentInspectorTyped<EcsPackedEntity> {
         public override bool OnGuiTyped (string label, ref EcsPackedEntity value, EcsEntityDebugView entityView) {
             EditorGUILayout.BeginHorizontal ();

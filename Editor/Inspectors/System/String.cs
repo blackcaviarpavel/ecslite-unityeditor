@@ -5,7 +5,7 @@
 
 using UnityEditor;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class StringInspector : EcsComponentInspectorTyped<string> {
         public override bool IsNullAllowed () {
             return true;

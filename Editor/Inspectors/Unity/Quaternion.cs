@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class QuaternionInspector : EcsComponentInspectorTyped<Quaternion> {
         public override bool OnGuiTyped (string label, ref Quaternion value, EcsEntityDebugView entityView) {
             var eulerAngles = value.eulerAngles;

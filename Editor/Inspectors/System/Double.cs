@@ -5,7 +5,7 @@
 
 using UnityEditor;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class DoubleInspector : EcsComponentInspectorTyped<double> {
         public override bool OnGuiTyped (string label, ref double value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.DoubleField (label, value);

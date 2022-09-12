@@ -3,30 +3,32 @@
 // Copyright (c) 2012-2022 Leopotam <leopotam@yandex.ru>
 // ----------------------------------------------------------------------------
 
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Submodules.EcsLite;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Leopotam.EcsLite.UnityEditor {
+namespace Submodules.EcsLiteEditor {
     public sealed class EcsWorldDebugSystem : IEcsPreInitSystem, IEcsRunSystem, IEcsWorldEventListener {
         readonly string _worldName;
         readonly GameObject _rootGo;
         readonly Transform _entitiesRoot;
         readonly bool _bakeComponentsInName;
-        readonly string _entityNameFormat;
         EcsWorld _world;
         EcsEntityDebugView[] _entities;
         Dictionary<int, byte> _dirtyEntities;
         Type[] _typesCache;
 
-        public EcsWorldDebugSystem (string worldName = null, bool bakeComponentsInName = true, string entityNameFormat = "X8") {
+        public EcsWorldDebugSystem (string worldName = null, bool bakeComponentsInName = false) {
             _bakeComponentsInName = bakeComponentsInName;
             _worldName = worldName;
-            _entityNameFormat = entityNameFormat;
             _rootGo = new GameObject (_worldName != null ? $"[ECS-WORLD {_worldName}]" : "[ECS-WORLD]");
             Object.DontDestroyOnLoad (_rootGo);
             _rootGo.hideFlags = HideFlags.NotEditable;
+            
             _entitiesRoot = new GameObject ("Entities").transform;
             _entitiesRoot.gameObject.hideFlags = HideFlags.NotEditable;
             _entitiesRoot.SetParent (_rootGo.transform, false);
@@ -45,10 +47,10 @@ namespace Leopotam.EcsLite.UnityEditor {
             }
         }
 
-        public void Run (IEcsSystems systems) {
+        public void Run () {
             foreach (var pair in _dirtyEntities) {
                 var entity = pair.Key;
-                var entityName = entity.ToString (_entityNameFormat);
+                var entityName = entity.ToString ();
                 if (_world.GetEntityGen (entity) > 0) {
                     var count = _world.GetComponentTypes (entity, ref _typesCache);
                     for (var i = 0; i < count; i++) {
@@ -72,7 +74,7 @@ namespace Leopotam.EcsLite.UnityEditor {
                 if (_bakeComponentsInName) {
                     _dirtyEntities[entity] = 1;
                 } else {
-                    go.name = entity.ToString (_entityNameFormat);
+                    go.name = entity.ToString ();
                 }
             }
             _entities[entity].gameObject.SetActive (true);
@@ -106,3 +108,4 @@ namespace Leopotam.EcsLite.UnityEditor {
         }
     }
 }
+#endif

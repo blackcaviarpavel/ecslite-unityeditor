@@ -5,9 +5,10 @@
 
 #if UNITY_EDITOR
 using System;
+using Submodules.EcsLite;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor {
+namespace Submodules.EcsLiteEditor {
     public static class EditorExtensions {
         public static string GetCleanGenericTypeName (Type type) {
             if (!type.IsGenericType) {

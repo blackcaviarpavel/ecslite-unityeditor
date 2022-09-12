@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Leopotam.EcsLite.UnityEditor.Inspectors {
+namespace Submodules.EcsLiteEditor {
     sealed class BoundsInspector : EcsComponentInspectorTyped<Bounds> {
         public override bool OnGuiTyped (string label, ref Bounds value, EcsEntityDebugView entityView) {
             var newValue = EditorGUILayout.BoundsField (label, value);
