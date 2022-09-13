@@ -6,13 +6,12 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Submodules.EcsLite;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Submodules.EcsLiteEditor {
-    public sealed class EcsWorldDebugSystem : IEcsPreInitSystem, IEcsRunSystem, IEcsWorldEventListener {
+    public sealed class EcsWorldDebugSystem : IEcsPreInitSystem, IEcsRunSystem, IEcsPostDestroySystem, IEcsWorldEventListener {
         readonly string _worldName;
         readonly GameObject _rootGo;
         readonly Transform _entitiesRoot;
@@ -21,6 +20,7 @@ namespace Submodules.EcsLiteEditor {
         EcsEntityDebugView[] _entities;
         Dictionary<int, byte> _dirtyEntities;
         Type[] _typesCache;
+        private bool _initialized;
 
         public EcsWorldDebugSystem (string worldName = null, bool bakeComponentsInName = false) {
             _bakeComponentsInName = bakeComponentsInName;
@@ -42,6 +42,8 @@ namespace Submodules.EcsLiteEditor {
             _world.AddEventListener (this);
             var entities = Array.Empty<int> ();
             var entitiesCount = _world.GetAllEntities (ref entities);
+            _initialized = true;
+            
             for (var i = 0; i < entitiesCount; i++) {
                 OnEntityCreated (entities[i]);
             }
@@ -63,6 +65,9 @@ namespace Submodules.EcsLiteEditor {
         }
 
         public void OnEntityCreated (int entity) {
+            if (!_initialized) {
+                return;
+            }
             if (!_entities[entity]) {
                 var go = new GameObject ();
                 go.transform.SetParent (_entitiesRoot, false);
@@ -81,12 +86,18 @@ namespace Submodules.EcsLiteEditor {
         }
 
         public void OnEntityDestroyed (int entity) {
+            if (!_initialized) {
+                return;
+            }
             if (_entities[entity]) {
                 _entities[entity].gameObject.SetActive (false);
             }
         }
 
         public void OnEntityChanged (int entity) {
+            if (!_initialized) {
+                return;
+            }
             if (_bakeComponentsInName) {
                 _dirtyEntities[entity] = 1;
             }
@@ -98,13 +109,18 @@ namespace Submodules.EcsLiteEditor {
             Array.Resize (ref _entities, newSize);
         }
 
-        public void OnWorldDestroyed (EcsWorld world) {
-            _world.RemoveEventListener (this);
-            Object.Destroy (_rootGo);
-        }
+        public void OnWorldDestroyed (EcsWorld world) { }
 
         public EcsEntityDebugView GetEntityView (int entity) {
             return entity >= 0 && entity < _entities.Length ? _entities[entity] : null;
+        }
+
+        public void PostDestroy()
+        {
+            _world.RemoveEventListener (this);
+            Object.Destroy (_rootGo);
+            
+            _initialized = false;
         }
     }
 }
